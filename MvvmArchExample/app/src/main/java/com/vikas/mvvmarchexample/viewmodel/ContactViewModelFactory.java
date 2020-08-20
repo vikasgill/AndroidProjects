@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.vikas.mvvmarchexample.repository.ContactRepository;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -12,32 +14,20 @@ import javax.inject.Singleton;
 
 @Singleton
 public class ContactViewModelFactory implements ViewModelProvider.Factory {
-    private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
+
+    final ContactRepository mContactRepository;
 
     @Inject
-    public ContactViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
-        this.creators = creators;
+    public ContactViewModelFactory(ContactRepository contactRepository){
+        this.mContactRepository = contactRepository;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        Provider<? extends ViewModel> creator = creators.get(modelClass);
-        if (creator == null) {
-            for (Map.Entry<Class<? extends ViewModel>, Provider<ViewModel>> entry : creators.entrySet()) {
-                if (modelClass.isAssignableFrom(entry.getKey())) {
-                    creator = entry.getValue();
-                    break;
-                }
-            }
+        if (modelClass.isAssignableFrom(ContactViewModel.class)) {
+            return (T) new ContactViewModel(mContactRepository);
         }
-        if (creator == null) {
-            throw new IllegalArgumentException("unknown model class " + modelClass);
-        }
-        try {
-            return (T) creator.get();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
