@@ -21,13 +21,14 @@ public class Contact {
     @TypeConverters(DateTimeConverter.class)
     private Date createdDate;
 
-    public Contact(String name, long number) {
-        this.name = name;
-        this.number = number;
+    public Contact(){
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Contact(ContactBuilder builder){
+        this.name = builder.name;
+        this.number = builder.number;
+        if(builder.id != -1)
+            this.id = builder.id;
     }
 
     public int getId() {
@@ -47,6 +48,48 @@ public class Contact {
     }
 
     public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate =  createdDate;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
+    }
+
+    public static class ContactBuilder{
+
+        private String name;
+        private long number;
+        private int id;
+
+        public ContactBuilder(){
+
+        }
+
+        public ContactBuilder setName(String name){
+            this.name = name;
+            return this;
+        }
+
+        public ContactBuilder setNumber(long number){
+            this.number = number;
+            return this;
+        }
+
+        public ContactBuilder setId(int id){
+            this.id = id;
+            return this;
+        }
+
+        public Contact buildContact(){
+            return new Contact(this);
+        }
     }
 }

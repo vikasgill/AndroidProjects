@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.vikas.mvvmarchexample.repository.ContactRepository;
 
-import java.util.Map;
-
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 
 @Singleton

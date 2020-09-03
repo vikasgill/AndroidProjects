@@ -15,6 +15,8 @@ import com.vikas.mvvmarchexample.model.Contact;
 
 public class ContactListAdapter extends ListAdapter<Contact, ContactListAdapter.ContactViewHolder> {
 
+    private OnItemClickListener mListener;
+
     public ContactListAdapter() {
         super(DIFFUTIL_CALLBACK);
     }
@@ -55,8 +57,26 @@ public class ContactListAdapter extends ListAdapter<Contact, ContactListAdapter.
             super(itemView);
             mName = itemView.findViewById(R.id.text_name);
             mContactNumber = itemView.findViewById(R.id.text_contact_number);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    mListener.onItemClick(getContactAt(position));
+                }
+            });
         }
     }
 
+    public Contact getContactAt(int position){
+        return getItem(position);
+    }
 
+    public interface OnItemClickListener{
+        void onItemClick(Contact contact);
+    }
+
+    public void setOnClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 }
